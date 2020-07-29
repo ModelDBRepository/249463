@@ -1,0 +1,144 @@
+<html><pre>
+Python and NEURON scripts for running single-cell simulations of layer V pyramidal cells (Hay model).
+
+Tuomo Maki-Marttunen, 2015-2018
+CC BY 4.0
+
+HOC-commands for simulations based on (Hay et al. 2011, "Models of neocortical layer 5b 
+                                       pyramidal cells capturing a wide range of dendritic and
+                                       perisomatic active properties", PLoS Comp Biol. 2011
+                                       Jul;7(7):e1002107)
+HOC-commands for in-vivo-like synaptic inputs based on (Hay & Segev 2015, "Dendritic excitability and gain control
+                                                        in recurrent cortical microcircuits", Cerebral Cortex
+                                                        25(10): 3561-3571)
+Library of variants based on (Maki-Marttunen et al. 2016, "Functional Effects of Schizophrenia-Linked Genetic Variants on Intrinsic
+                              Single-Neuron Excitability: A Modeling Study", Biol Psychiatry Cogn Neurosci Neuroimaging. 2016 Jan
+                              1;1(1):49-59.
+
+Mod Files included:
+ CaDynamics_E2.mod                    #mod file for Intracellular Ca dynamics
+ Ca_HVA.mod                           #mod file for HVA Ca currents
+ Ca_LVAst.mod                         #mod file for LVA Ca currents
+ Ih.mod                               #mod file for HCN current
+ Im.mod                               #mod file for M-current
+ K_Pst.mod                            #mod file for persistent K current
+ K_Tst.mod                            #mod file for transient K current
+ NaTa_t.mod                           #mod file for transient Na current
+ Nap_Et2.mod                          #mod file for persistent Na current
+ ProbAMPANMDA2.mod                    #mod file for probabilistic glutamatergic synapse
+ ProbUDFsyn2.mod                      #mod file for probabilistic GABAergic synapse 
+ SK_E2.mod                            #mod file for SK current
+ SKv3_1.mod                           #mod file for Kv3.1 potassium current
+ epsp.mod                             #mod file for EPSP-like current
+
+Python files included:
+ calcapicalthresholds_control.py      #Determine the threshold amplitude for a 200-ms stimuli at the apical dendrite (different distances from soma) for eliciting a spike
+ calcapicalthresholds_epsp_control.py #Determine the threshold amplitude for a alpha-shaped synaptic currents (0.5 ms rise time, 5 ms decay time) at the apical dendrite (different distances from soma) for eliciting a spike
+ calcifcurves.py                      #Calculate the fI curves for the variants
+ calcifcurves_comb.py                 #Calculate the fI curves for the variant combinations
+ calcnspikesperburst2.py              #Calculate the numbers of bursts given different parameter changes and different input current amplitudes. Needed for Fig. 1.
+ calcsteadystate.py                   #Calculate the steady-state behaviour of different variants. Needed for Fig. 2 time courses
+ calcupdown2responses.py              #Calculate the responses to combinations of apical and perisomatic stimuli during simplistic up and down states. Needed for Fig. 4
+ calcupdownresponses_noisydown.py     #Calculate the responses to combinations of apical and perisomatic stimuli during in-vivo-like background synaptic firing (down state). Needed for Fig. 4
+ calcupdownresponses_noisyup.py       #Calculate the responses to combinations of apical and perisomatic stimuli during in-vivo-like background synaptic firing (up state). Needed for Fig. 4
+ coding.py                            #Determine the neuron response (variants) to different combinations of inputs. Needed for Fig. 7A
+ coding_comb.py                       #Determine the neuron response (variant combinations) to different combinations of inputs.
+ coding_nonprop_comb_somaticI.py      #Determine the neuron response (variant combinations) to different combinations of inputs, amplitudes of inputs not proportional to threshold conductances. Needed for Fig. S4
+ coding_nonprop_somaticI.py           #Determine the neuron response (variants) to different combinations of inputs, amplitudes of inputs not proportional to threshold conductances. Needed for Fig. 7
+ collectupdownresponses_noisy.py      #Collect responses to noisy up- and down state stimuli
+ drawfigcomb.py                       #Draw Fig. S4 (panels A, B, and C)
+ drawnspikesperburst2.py              #Draw Fig. 1 (left panel) based on the output of calcnspikesperburst2.py
+ drawupdownresponses_noisy.py         #Draw Fig. 5 data based on collectupdownresponses_noisy.py
+ findppicoeffs.py                     #Determine the PPI coefficient for different ISIs (variants)
+ findppicoeffs_comb.py                #Determine the PPI coefficient for different ISIs (variant combinations)
+ findppicoeffs_complement.py          #Determine the PPI coefficient for different ISIs, dense resolution (variants)
+ findthresholdbasalamps_coding.py     #Determine the threshold conductance for spike initiation in the basal dendritic region in the coding experiment (control)
+ findthresholddistalamps.py           #Determine the threshold conductance for spike initiation in the apical region from a given distance on (variants)
+ findthresholddistalamps_coding.py    #Determine the threshold conductance for spike initiation in the 6 apical dendritic regions in the coding experiment (control)
+ findthresholddistalamps_comb.py      #Determine the threshold conductance for spike initiation in the apical region from a given distance on (variant combinations)
+ mutation_stuff.py                    #Python library for the effects of SNP-like SCZ-associated variants
+ mytools.py                           #Python library, general tools
+ protocol.py                          #Python library needed by setparams.py for setting the default values for certain parameters
+ runcontrols_cs.py                    #Calculate the control neuron's firing behaviour
+ savebasalsynapselocations_coding.py  #Determine locations for 1000 synapses in the basal dendritic region
+ savesynapselocations.py              #Determine locations for 3000 synapses in the apical dendritic region, from a given distance on
+ savesynapselocations_coding.py       #Determine locations for 1000 synapses in one of the six apical dendritic regions
+ scalemutations_cs.py                 #Determine the scaling parameters for the variants
+ setparams.py                         #Set parameters to get the altered Hay models from the unaltered (original) Hay model
+
+Pre-saved data
+ control_cs.sav                       #Control neuron data (needed by scalemutations_cs.py)
+ controlamps_cs0.sav                  #Control neuron data (needed by scalemutations_cs.py)
+ controlamps_cs1.sav                  #Control neuron data (needed by scalemutations_cs.py)
+ controlamps_cs2.sav                  #Control neuron data (needed by scalemutations_cs.py)
+ controlamps_cs3.sav                  #Control neuron data (needed by scalemutations_cs.py)
+ controlamps_cs4.sav                  #Control neuron data (needed by scalemutations_cs.py)
+ controlamps_cs5.sav                  #Control neuron data (needed by scalemutations_cs.py)
+ controlamps_cs6.sav                  #Control neuron data (needed by scalemutations_cs.py)
+ scalings_cs.sav                      #Scaling coefficients (needed by all scripts running variant simulations)
+ synlocs300.sav                       #Locations of the synapses (needed by findthresholddistalamps*.py and findppicoeffs*.py)
+
+
+To run NEURON simulation and plot the results (Figures 1 and A4), run the following commands:
+
+################ Initialization ################
+<font color=green>
+nrnivmodl               #Compile the mechanisms
+</font>
+
+########## Simulations for Fig 1 (left panel) ##########
+<font color=green>
+python calcnspikesperburst2.py         #Calculates many DC stimulation experiments (44 different parameter sets, 11 current amplitudes for each). 
+                                       #Saves files spikesperburst2_*.sav that contain the data on how many spikes there were per butsts. Takes 2-3 hours on standard PC.
+                                       #The script also saves figures nspikesperbursts_cs0_${iParam}_${iI}.eps that illustrate the membrane potential time course of each experiment.
+python drawnspikesperburst2.py         #Analyzes the data produced by calcnspikesperburst2.py and saves nSpikesPerBurstsHay.eps (the left panel of Fig. 1)
+</font>
+
+########## Simulations for Fig 5A ##########
+<font color=green>
+python calcapicalthresholds_control.py      #This script calculates the thresholds for apical DC input to induce a somatic spike. Saves data needed by calcupdownresponses_noisyup.py and calcupdownresponses_noisydown.py 
+python calcapicalthresholds_epsp_control.py #This script calculates the thresholds for apical EPSP-like input to induce a somatic spike. Saves data needed by calcupdownresponses_noisyup.py and calcupdownresponses_noisydown.py 
+
+</font>
+
+
+########## Simulations for Fig A4 (panels A, B, and C) ##########
+### f-I curve and PPI experiments:
+<font color=green>
+python calcifcurves_comb.py            #Calculates the f-I curves for the combination of variants (epsilon = 1/4, 1/2, -1/4 and -1/2 scalings) - the combination consists of the
+                                       #variants (max. one per gene) that had a maximal excitatory effect on the f-I curves in Fig. 2. This is a heavy operation, takes around 15 hours.
+python findthresholddistalamps_comb.py #Calculates the threshold conductance for 3000 synapses distributed along the apical dendrite, starting from 300 um (i.e., synlocs300.sav is needed).
+                                       #Saves files thresholddistalamp300_cs*_comb0.sav. This is relatively light script, takes approximately 5 min per parameter set (only first one
+                                       #needed really) on a standard PC.
+python findppicoeffs_comb.py 0 1 0     #Calculates the PPI curves using the data saved by findthresholddistalamps_comb.py. Here, three arguments are given to constrain the process:
+                                       #Only combination "0" (the same as in above scripts, i.e. the one that gave an excitatory effect in f-I experiments) is used, only one
+                                       #distribution of synapses (starting from 300 um), and only for one model (no parameter changes). This is a heavy operation, takes approximately
+                                       #4 hours.
+
+# We also need the above data for control case (blue curves). This can be obtained by running calcifcurves.py,  findthresholddistalamps.py and findppicoeffs.py. Note that
+# these scripts can be used to run any of the >100 variants, but that the control simulations are included only for the first variant. Thus we run them with argument "0" indicating
+# we only want the first variant. If you want further speed up, change the code that only iter=-1 will be run (but then include four or five empty lists before these data in the pickle array)
+python calcifcurves.py 0            #Calculates the f-I curves for the variant "0" (epsilon = 1/4, 1/2, -1/4 and -1/2 scalings) and the control neuron. This is quite heavy, takes around 15 hours.
+python findthresholddistalamps.py 0 #Calculates the threshold conductance for 3000 synapses distributed along the apical dendrite, starting from 300 um, for variant "0" and the control neuron
+python findppicoeffs.py 0 1 0       #Calculates the PPI curves using the data saved by findthresholddistalamps.py. A heavy operation, 4-5 hours on standard PC.
+
+### Coding experiment:
+for i in 0 1 2 3 4 5                         # In each of these six simulations,
+do                                           # we distribute the synapses
+  python savesynapselocations_coding.py $i   # onto one of the six distal regions
+done                                         # (so that they are relatively uniformly distributed)
+python savebasalsynapselocations_coding.py   # Here the same for basal dendrites
+
+#Next, we calculate the response of the neuron with the combination of variants to the 128 inputs with different synaptic conductances and a small somatic input
+#This is a lot of simulations, so if you can parallelize them that's commendable. One simulation takes 0.5 - 1 hour on a standard computer.
+for syncond in 0.0000025 0.000005 0.0000075 0.00001 0.0000125 0.000015 0.0000175 0.00002 0.0000225 0.000025 0.0000275 0.00003 0.0000325 0.000035 0.0000375 0.00004 0.0000425 0.000045 0.0000475 0.00005 0.0000525 0.000055
+do
+  for somaticI in -0.1 -0.09 -0.08 -0.07 -0.06 -0.05 -0.04 -0.03 -0.02 -0.01 0.0 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.1
+  do                                                              
+    python coding_nonprop_comb_somaticI.py 0 $syncond 0 $somaticI   
+  done
+done
+
+
+</font>
+

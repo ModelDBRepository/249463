@@ -1,0 +1,79 @@
+<html><pre>
+Python and NEURON scripts for running single-cell simulations of layer V pyramidal cells (Almog model).
+
+Tuomo Maki-Marttunen, 2015-2018
+CC BY 4.0
+
+HOC-commands for simulations based on (Almog & Korngreen 2014, "A Quantitative Description of Dendritic Conductances and
+                                       Its Application to Dendritic Excitation in Layer 5 Pyramidal Neurons", J Neurosci 34(1):182-196)
+Library of variants based on (Maki-Marttunen et al. 2016, "Functional Effects of Schizophrenia-Linked Genetic Variants on Intrinsic
+                              Single-Neuron Excitability: A Modeling Study", Biol Psychiatry Cogn Neurosci Neuroimaging. 2016 Jan
+                              1;1(1):49-59), see also (Maki-Marttunen et al. 2017, "Pleiotropic effects of schizophrenia-associated
+                                                       genetic variants in neuron firing and cardiac pacemaking revealed by computational
+                                                       modeling", Translational Psychiatryvolume 7, Article number: 5 (2017))
+
+
+
+
+
+################ Initialization ################
+<font color=green>
+nrnivmodl               #Compile the mechanisms
+</font>
+
+########## Simulations for Fig 1 (right panel) ##########
+<font color=green>
+python calcnspikesperburst.py         #Calculates many DC stimulation experiments (33 different parameter sets, 11 current amplitudes for each). 
+                                      #Saves files spikesperburst_*.sav that contain the data on how many spikes there were per butsts. Takes around 30 hours on a standard PC.
+                                      #The script also saves figures nspikesperbursts_cs0_${iParam}_${iI}.eps that illustrate the membrane potential time course of each experiment.
+python drawnspikesperburst.py         #Analyzes the data produced by calcnspikesperburst.py and saves nSpikesPerBurstsAlmog.eps (the right panel of Fig. 1)
+</font>
+
+########## Simulations for Fig A4 (panels D, E, and F) ##########
+<font color=green>
+for iter in 0 2 6 8 -1
+do
+  python calcifcurves2_comb_one.py 0 0 $iter #Calculates the f-I curves for the combination of variants (epsilon = 1/4, 1/2, -1/4 and -1/2 scalings) - the combination consists of the
+done                                         #variants (max. one per gene) that had a maximal excitatory effect on the f-I curves in Fig. 2. This is a heavy operation, takes 15-20 hours per scaling.
+python collectifcurves2_comb_one.py 0 0      #Combines the results
+                                      
+python findthresholddistalamps_comb.py #Calculates the threshold conductance for 3000 synapses distributed along the apical dendrite, starting from 450 um (i.e., synlocs450.0.sav is needed).
+                                       #Saves files thresholddistalamp450_cs*_comb0.sav. This is relatively light script, takes approximately 2 hours per parameter set (only first one
+                                       #needed really) on a standard PC.
+for iter in 0 2 6 8 -1 
+do
+  python findppicoeffs_merge_comb_one.py 0 2 0 $iter #Calculates the PPI curves using the data saved by findthresholddistalamps_comb.py. Here, four arguments are given to constrain the process:
+                                                     #Only combination "0" (the same as in above scripts, i.e. the one that gave an excitatory effect in f-I experiments) is used, only one
+                                                     #distribution of synapses (starting from 450 um), only for one model (no altered Almog models), and one scaling coefficient ("iter") at a time.
+                                                     #This is a heavy operation, takes approximately 24 hours per scaling.
+done
+
+# We also need the above data for control case (blue curves). This can be obtained by running calcifcurves2.py,  findthresholddistalamps.py and findppicoeffs.py. Note that
+# these scripts can be used to run any of the >100 variants, but that the control simulations are included only for the first variant. Thus we run them with argument "0" indicating
+# we only want the first variant. If you want further speed up, change the code that only iter=-1 will be run (but then include four or five empty lists before these data in the pickle array)
+python calcifcurves2.py 0 0         #Calculates the f-I curves for the variant "0" (epsilon = 1/4, 1/2, -1/4 and -1/2 scalings) and the control neuron. This is quite heavy, takes XXX hours.
+python findthresholddistalamps.py 0 #Calculates the threshold conductance for 3000 synapses distributed along the apical dendrite, starting from 450 um, for variant "0" and the control neuron
+python findppicoeffs_merge.py 0 2 0 #Calculates the PPI curves using the data saved by findthresholddistalamps.py. A heavy operation, 120 hours on standard PC. To boost up: only iter=-1 is
+                                    #needed, thus the others could be skipped.
+
+### Coding experiment:
+for i in 0 1 2 3 4 5 6                       # In each of these seven simulations,
+do                                           # we distribute the synapses
+  python savesynapselocations_coding.py $i   # onto one of the seven distal regions
+done                                         # (so that they are relatively uniformly distributed)
+python savebasalsynapselocations_coding.py   # Here the same for basal dendrites
+
+#Next, we calculate the response of the neuron with the combination of variants to the 128 inputs with different synaptic conductances and a small somatic input
+#This is a lot of simulations, so if you can parallelize them that's commendable. One simulation takes approximately 
+for syncond in 0.00001 0.00002 0.00003 0.00004 0.00005 0.00006 0.00007 0.00008 0.00009 0.0001
+do
+  for somaticI in -0.2 -0.15 -0.1 -0.05 0.0 0.05 0.1 0.15 0.2
+  do                                                              
+    python coding_nonprop_somaticI_comb.py 0 $syncond 0 $somaticI   
+  done
+done
+
+
+</font>
+
+
