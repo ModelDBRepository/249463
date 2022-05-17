@@ -27,3 +27,6 @@ pacemaking revealed by computational modeling", Translational
 Psychiatryvolume 7, Article number: 5 (2017))
 
 Please see the readme's in the almog and hay folders for how to run.
+
+---
+2022-05-17: fix ProbAMPANMDA2 for Neuron9.0
