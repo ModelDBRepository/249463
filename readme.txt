@@ -27,3 +27,8 @@ pacemaking revealed by computational modeling", Translational
 Psychiatryvolume 7, Article number: 5 (2017))
 
 Please see the readme's in the almog and hay folders for how to run.
+
+Changelog
+---------
+2022-05: Updated MOD files to contain valid C++ and be compatible with
+         the upcoming versions 8.2 and 9.0 of NEURON.
