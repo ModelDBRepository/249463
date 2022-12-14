@@ -17,7 +17,7 @@ INDEPENDENT {t FROM 0 TO 1 WITH 1 (ms)}
 
 NEURON {
 	POINT_PROCESS epsp
-	RANGE onset, tau0, tau1, imax, i, myv, curr
+	RANGE onset, tau0, tau1, imax, i, myv
 	NONSPECIFIC_CURRENT i
 }
 UNITS {
