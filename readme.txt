@@ -32,3 +32,4 @@ Changelog
 ---------
 2022-05: Updated MOD files to contain valid C++ and be compatible with
          the upcoming versions 8.2 and 9.0 of NEURON.
+2022-12: Fix 9.0.0 upcoming error: curr used as both variable and function in file epsp.mod
